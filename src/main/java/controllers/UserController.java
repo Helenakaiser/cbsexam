@@ -3,6 +3,7 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import cache.UserCache;
 import model.User;
 import utils.Hashing;
 import utils.Log;
@@ -10,9 +11,13 @@ import utils.Log;
 public class UserController {
 
   private static DatabaseController dbCon;
+  //Helenas notes: I create an object from the UserCache class.
+  private static UserCache userCache;
 
   public UserController() {
     dbCon = new DatabaseController();
+    //Helenas notes: I apply a value to the object.
+    userCache = new UserCache();
   }
 
   public static User getUser(int id) {

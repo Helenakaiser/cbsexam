@@ -10,7 +10,7 @@ public final class Hashing {
   //Helenas notes: I create a salt String so I can hash the user password before saving it.
   private String salt="saltysalt";
 
-  // TODO: You should add a salt and make this secure
+  // TODO: You should add a salt and make this secure          FIXED
   public static String md5(String rawString) {
     try {
 
@@ -40,7 +40,7 @@ public final class Hashing {
     return null;
   }
 
-  // TODO: You should add a salt and make this secure
+  // TODO: You should add a salt and make this secure     FIXED
   public static String sha(String rawString) {
     try {
       // We load the hashing algoritm we wish to use.
@@ -62,7 +62,7 @@ public final class Hashing {
     return rawString;
   }
 
-  //Helenas notes: I create a method to hash the user password before saving it.
+  //Helenas notes: I create a method and add salt to hash the user password before saving it and make it secure.
   public String saltysalt(String string){
     String slat = string+this.salt;
     return  md5(slat);

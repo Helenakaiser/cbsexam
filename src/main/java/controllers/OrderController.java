@@ -3,6 +3,8 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import cache.OrderCache;
 import model.Address;
 import model.LineItem;
 import model.Order;
@@ -12,9 +14,13 @@ import utils.Log;
 public class OrderController {
 
   private static DatabaseController dbCon;
+  //Helenas notes: I create an object from the OrderCashe class.
+  private static OrderCache orderCache;
 
   public OrderController() {
     dbCon = new DatabaseController();
+    //Helenas notes: I apply a value to the object.
+    orderCache = new OrderCache();
   }
 
   public static Order getOrder(int id) {
