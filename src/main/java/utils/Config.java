@@ -114,9 +114,9 @@ public final class Config {
     SOLR_PATH = json.get("SOLR_PATH").toString().replace("\"", "");
     SOLR_CORE = json.get("SOLR_CORE").toString().replace("\"", "");
     PRODUCT_TTL = json.get("PRODUCT_TTL").getAsLong();
-    //Helenas notes: I dont know if these statements are needed, but when I code them, the program does not run. Therefore I made them a comment.
-    //ORDER_TTL = json.get("ORDER_TTL").getAsLong();
-    //USER_TTL = json.get("USER_TTL").getAsLong();
+    //Helenas notes:
+    ORDER_TTL = json.get("ORDER_TTL").getAsLong();
+    USER_TTL = json.get("USER_TTL").getAsLong();
   }
 
 }
