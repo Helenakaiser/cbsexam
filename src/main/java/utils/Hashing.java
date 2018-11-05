@@ -7,6 +7,9 @@ import org.bouncycastle.util.encoders.Hex;
 
 public final class Hashing {
 
+  //Helenas notes: I create a salt String so I can hash the user password before saving it.
+  private String salt="saltysalt";
+
   // TODO: You should add a salt and make this secure
   public static String md5(String rawString) {
     try {
@@ -57,5 +60,11 @@ public final class Hashing {
     }
 
     return rawString;
+  }
+
+  //Helenas notes: I create a method to hash the user password before saving it.
+  public String saltysalt(String string){
+    String slat = string+this.salt;
+    return  md5(slat);
   }
 }

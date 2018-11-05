@@ -11,6 +11,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.Product;
+//Helenas notes: I import the Encryption class from utils under imports, to get acces to the method encryptDecryptXOR().
+import utils.Encryption;
+
 
 @Path("product")
 public class ProductEndpoints {
@@ -26,9 +29,11 @@ public class ProductEndpoints {
     // Call our controller-layer in order to get the order from the DB
     Product product = ProductController.getProduct(idProduct);
 
-    // TODO: Add Encryption to JSON
+    // TODO: Add Encryption to JSON     :FIXED
     // We convert the java object to json with GSON library imported in Maven
     String json = new Gson().toJson(product);
+    //Helenas notes: I use the method "encryptDecryptXOR()" from the Encryption class to add encyption to JSON.
+    json = Encryption.encryptDecryptXOR(json);
 
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.TEXT_PLAIN_TYPE).entity(json).build();
@@ -42,9 +47,11 @@ public class ProductEndpoints {
     // Call our controller-layer in order to get the order from the DB
     ArrayList<Product> products = ProductController.getProducts();
 
-    // TODO: Add Encryption to JSON
+    // TODO: Add Encryption to JSON     :FIXED
     // We convert the java object to json with GSON library imported in Maven
     String json = new Gson().toJson(products);
+    //Helenas notes: I use the method "encryptDecryptXOR()" from the Encryption class to add encyption to JSON.
+    json = Encryption.encryptDecryptXOR(json);
 
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.TEXT_PLAIN_TYPE).entity(json).build();

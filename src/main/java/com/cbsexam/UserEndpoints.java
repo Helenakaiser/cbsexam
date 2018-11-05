@@ -11,6 +11,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.User;
+//Helenas notes: I import the Encryption class from utils under imports, to get acces to the method encryptDecryptXOR().
+import utils.Encryption;
 import utils.Log;
 
 @Path("user")
@@ -27,14 +29,24 @@ public class UserEndpoints {
     // Use the ID to get the user from the controller.
     User user = UserController.getUser(idUser);
 
-    // TODO: Add Encryption to JSON
+    // TODO: Add Encryption to JSON      :FIXED
     // Convert the user object to json in order to return the object
     String json = new Gson().toJson(user);
+    //Helenas notes: I use the method "encryptDecryptXOR()" from the Encryption class to add encyption to JSON.
+    json = Encryption.encryptDecryptXOR(json);
 
-    // Return the user with the status code 200
-    // TODO: What should happen if something breaks down?
-    return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
+    // TODO: What should happen if something breaks down?     :FIXED
+    // Return the data to the user
+    //Helenas notes: I code an if statement to check the method getUser.
+    if (user != null) {
+      // Return the user with the status code 200
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
+    } else {
+      //Helenas notes: I return the response status 400 which is a http message for “failure”.
+      return Response.status(400).entity("Could not get user").build();
+    }
   }
+
 
   /** @return Responses */
   @GET
@@ -47,9 +59,11 @@ public class UserEndpoints {
     // Get a list of users
     ArrayList<User> users = UserController.getUsers();
 
-    // TODO: Add Encryption to JSON
+    // TODO: Add Encryption to JSON      :FIXED
     // Transfer users to json in order to return it to the user
     String json = new Gson().toJson(users);
+    //My notes: I use the method "encryptDecryptXOR()" from the Encryption class to add encyption to JSON.
+    json = Encryption.encryptDecryptXOR(json);
 
     // Return the users with the status code 200
     return Response.status(200).type(MediaType.APPLICATION_JSON).entity(json).build();

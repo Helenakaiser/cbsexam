@@ -19,6 +19,21 @@ public final class Config {
   private static int SOLR_PORT;
   private static String SOLR_PATH;
   private static String SOLR_CORE;
+
+  //Helenas notes: I create a USER_TTL statement, that I return in the getusers method.
+  private static long USER_TTL;
+  //Helenas notes: I create a getUsers method, that i use in the the UserCache class.
+  public static long getUsersTtl() {
+    return USER_TTL;
+  }
+
+  //Helenas notes: I create a ORDER_TTL statement, that I return in the getOrders method.
+  private static long ORDER_TTL;
+  //Helenas notes: I create a getOrders method, that i use in the the OrderCache class.
+  public static long getOrdersTtl() {
+    return ORDER_TTL;
+  }
+
   private static long PRODUCT_TTL;
 
   public static long getProductTtl() {
@@ -99,5 +114,9 @@ public final class Config {
     SOLR_PATH = json.get("SOLR_PATH").toString().replace("\"", "");
     SOLR_CORE = json.get("SOLR_CORE").toString().replace("\"", "");
     PRODUCT_TTL = json.get("PRODUCT_TTL").getAsLong();
+    //Helenas notes: I dont know if these statements are needed, but when I code them, the program does not run. Therefore I made them a comment.
+    //ORDER_TTL = json.get("ORDER_TTL").getAsLong();
+    //USER_TTL = json.get("USER_TTL").getAsLong();
   }
+
 }
