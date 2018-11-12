@@ -122,7 +122,7 @@ public class UserController {
             + "', '"
             + user.getLastname()
             + "', '"
-                //Helenas notes: I call the method that lays in the hashing class.
+                //Helenas notes: I call the method I made in the hashing class.
             + hashing.saltysalt(user.getPassword())
             + "', '"
             + user.getEmail()

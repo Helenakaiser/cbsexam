@@ -62,7 +62,7 @@ public class UserEndpoints {
     // TODO: Add Encryption to JSON      :FIXED
     // Transfer users to json in order to return it to the user
     String json = new Gson().toJson(users);
-    //My notes: I use the method "encryptDecryptXOR()" from the Encryption class to add encyption to JSON.
+    //Helenas notes: I use the method "encryptDecryptXOR()" from the Encryption class to add encyption to JSON.
     json = Encryption.encryptDecryptXOR(json);
 
     // Return the users with the status code 200
