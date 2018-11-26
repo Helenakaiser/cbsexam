@@ -49,12 +49,12 @@ public class UserController {
       // Get first object, since we only have one
       if (rs.next()) {
         user =
-            new User(
-                rs.getInt("id"),
-                rs.getString("first_name"),
-                rs.getString("last_name"),
-                rs.getString("password"),
-                rs.getString("email"));
+                new User(
+                        rs.getInt("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("password"),
+                        rs.getString("email"));
 
         // return the create object
         return user;
@@ -92,12 +92,12 @@ public class UserController {
       // Loop through DB Data
       while (rs.next()) {
         User user =
-            new User(
-                rs.getInt("id"),
-                rs.getString("first_name"),
-                rs.getString("last_name"),
-                rs.getString("password"),
-                rs.getString("email"));
+                new User(
+                        rs.getInt("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("password"),
+                        rs.getString("email"));
 
         // Add element to list
         users.add(user);
@@ -128,23 +128,23 @@ public class UserController {
     //Helenas notes: I code an object of the hashing class.
     Hashing hashing = new Hashing();
     int userID = dbCon.insert(
-        "INSERT INTO user(first_name, last_name, password, email, created_at) VALUES('"
-            + user.getFirstname()
-            + "', '"
-            + user.getLastname()
-            + "', '"
-                //Helenas notes: I call the method I made in the hashing class.
-            + hashing.saltysalt(user.getPassword())
-            + "', '"
-            + user.getEmail()
-            + "', "
-            + user.getCreatedTime()
-            + ")");
+            "INSERT INTO user(first_name, last_name, password, email, created_at) VALUES('"
+                    + user.getFirstname()
+                    + "', '"
+                    + user.getLastname()
+                    + "', '"
+                    //Helenas notes: I call the method I made in the hashing class.
+                    + hashing.saltysalt(user.getPassword())
+                    + "', '"
+                    + user.getEmail()
+                    + "', "
+                    + user.getCreatedTime()
+                    + ")");
 
     if (userID != 0) {
       //Update the userid of the user before returning
       user.setId(userID);
-    } else{
+    } else {
       // Return null if user has not been inserted into database
       return null;
     }
@@ -155,7 +155,7 @@ public class UserController {
 
   //Helenas notes: (related to the "login" to-do in UserEndpoint)
   public static String loginUser(User user) {
-    if(dbCon == null) {
+    if (dbCon == null) {
       dbCon = new DatabaseController();
     }
     String sql = "SELECT * FROM user where email =" + user.getEmail() + "AND password=" + user.getPassword() + " ";
@@ -167,7 +167,7 @@ public class UserController {
     String token = null;
 
     try {
-      if(resultSet.next()){
+      if (resultSet.next()) {
         userLogin =
                 new User(
                         resultSet.getInt("id"),
@@ -176,29 +176,27 @@ public class UserController {
                         resultSet.getString("password"),
                         resultSet.getString("email"));
 
-                        if(userLogin != null){
-                          try{
-                            Algorithm algorithm = Algorithm.HMAC256("secret");
-                            token = JWT.create()
-                                    .withClaim("userid", userLogin.getId())
-                                    .withIssuer("auth0")
-                                    .sign(algorithm);
-                          }
-                          catch (JWTCreationException exception) {
-                            System.out.println(exception.getMessage());
-                            } finally {
-                              return token;
-                               }
-                        }
-      }
-      else {
-        System.out.println("No user found");
-        }
-        } catch (SQLException ex) {
-          System.out.println(ex.getMessage());
+        if (userLogin != null) {
+          try {
+            Algorithm algorithm = Algorithm.HMAC256("secret");
+            token = JWT.create()
+                    .withClaim("userid", userLogin.getId())
+                    .withIssuer("auth0")
+                    .sign(algorithm);
+          } catch (JWTCreationException exception) {
+            System.out.println(exception.getMessage());
+          } finally {
+            return token;
           }
+        }
+      } else {
+        System.out.println("No user found");
+      }
+    } catch (SQLException ex) {
+      System.out.println(ex.getMessage());
+    }
 
-         return null;
+    return null;
   }
 
   //Helenas notes: This method is related to the "delete users" to-do from the UserEndpoints class.
@@ -244,6 +242,24 @@ public class UserController {
 
 
   //Helenas notes: Related to the "update users" to-do from the UserEndpoint class.
+  public static User update(User user) {
+    if (dbCon == null) {
+      dbCon = new DatabaseController();
+    }
+   try
+  {
+    PreparedStatement updateUser = dbCon.getConnection().prepareStatement("UPDATE user SET first_name = ?, lastname = ?, password = ?, email = ? WHERE id = ?");
 
+    updateUser.setString(1, user.getFirstname());
+    updateUser.setString(2, user.getLastname());
+    updateUser.setString(3, user.getPassword());
+    updateUser.setString(4, user.getEmail());
+    updateUser.setInt(5, user.getId());
 
+    updateUser.executeUpdate();
+  } catch(SQLException ex) {
+    ex.printStackTrace();
+  }
+    return user;
+  }
 }

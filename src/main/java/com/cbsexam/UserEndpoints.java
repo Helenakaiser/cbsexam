@@ -3,6 +3,7 @@ package com.cbsexam;
 import com.google.gson.Gson;
 import controllers.UserController;
 import java.util.ArrayList;
+import javax.jws.soap.SOAPBinding;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -122,6 +123,7 @@ public class UserEndpoints {
   @Path("/delete")
   @Consumes(MediaType.APPLICATION_JSON)
 
+  //Helenas notes: Creating the method deleteUser.
   public Response deleteUser(String body) {
 
     User user = new Gson().fromJson(body, User.class);
@@ -139,8 +141,22 @@ public class UserEndpoints {
 
 
   // TODO: Make the system able to update users
-  public Response updateUser(String x) {
+  //Helenas notes: Creating a reference to postman
+  @POST
+  @Path("/update")
+  @Consumes(MediaType.APPLICATION_JSON)
 
+  //Helenas notes: Creating the method updateUser.
+  public Response updateUser(String body) {
+
+    User user = new Gson().fromJson(body, User.class);
+    String token = UserController.getTokenVerifier(user);
+
+    if(token != "") {
+      UserController.update(user);
+      //Helenas notes: Return af response with status 200 and JSON as type
+      return  Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("User has been updated").build();
+    } else
     // Return a response with status 200 and JSON as type
     return Response.status(400).entity("Endpoint not implemented yet").build();
   }
