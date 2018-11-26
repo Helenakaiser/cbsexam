@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import cache.UserCache;
+
+import com.sun.org.apache.xml.internal.security.algorithms.Algorithm;
+
 import model.User;
 import utils.Hashing;
 import utils.Log;
@@ -141,4 +144,54 @@ public class UserController {
     // Return user
     return user;
   }
+
+  //Helenas notes: (related to the token to do in UserEndpoint)
+  public static String loginUser(User user) {
+    if(dbCon == null) {
+      dbCon = new DatabaseController();
+    }
+    String sql = "SELECT * FROM user where email =" + user.getEmail() + "AND password=" + user.getPassword() + " ";
+
+    dbCon.loginUser(sql);
+
+    ResultSet resultSet = dbCon.query(sql);
+    User userLogin;
+    String token = null;
+
+    try {
+      if(resultSet.next()){
+        userLogin =
+                new User(
+                        resultSet.getInt("id"),
+                        resultSet.getString("firstname"),
+                        resultSet.getString("lastname"),
+                        resultSet.getString("password"),
+                        resultSet.getString("email"));
+
+                        if(userLogin != null){
+                          try{
+                            Algorithm algorithm = Algorithm.HMAC256("secret");
+                            token = JWT.create()
+                                    .withClaim("userid", userLogin.getId())
+                                    .withIssuer("auth0")
+                                    .sign(algorithm);
+                          }
+                          catch (JWTCreateExeption exeption) {
+                            System.out.println(exeption.getMessage());
+                            } finally {
+                              return token;
+                               }
+                        }
+      }
+      else {
+        System.out.println("No user found");
+        }
+        } catch (SQLException ex) {
+          System.out.println(ex.getMessage());
+          }
+
+         return " ";
+
+  }
+
 }

@@ -110,4 +110,8 @@ public class DatabaseController {
     // Return the resultset which at this point will be null
     return result;
   }
+
+    //Helenas notes: (related to the token to-do)
+    public void loginUser(String sql) {
+    }
 }

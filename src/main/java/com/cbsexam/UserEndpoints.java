@@ -98,6 +98,23 @@ public class UserEndpoints {
   @Consumes(MediaType.APPLICATION_JSON)
   public Response loginUser(String x) {
 
+
+    //Helenas notes: (related to the token to-do)
+    String token = UserController.loginUser(user);
+
+    if(token!="User could not be created"){
+
+      return
+              Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
+    }
+      else {
+
+    }
+
+
+
+
+
     // Return a response with status 200 and JSON as type
     return Response.status(400).entity("Endpoint not implemented yet").build();
   }
