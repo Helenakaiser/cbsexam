@@ -96,10 +96,13 @@ public class UserEndpoints {
   @POST
   @Path("/login")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response loginUser(String x) {
+  public Response loginUser(String body) {
 
 
     //Helenas notes: (related to the token to-do)
+    User user = new Gson().fromJson(body, User.class);
+
+
     String token = UserController.loginUser(user);
 
     if(token!="User could not be created"){
@@ -110,9 +113,6 @@ public class UserEndpoints {
       else {
 
     }
-
-
-
 
 
     // Return a response with status 200 and JSON as type

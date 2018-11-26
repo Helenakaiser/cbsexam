@@ -5,11 +5,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import cache.UserCache;
 
-import com.sun.org.apache.xml.internal.security.algorithms.Algorithm;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import model.User;
 import utils.Hashing;
 import utils.Log;
+
 
 public class UserController {
 
@@ -141,7 +144,7 @@ public class UserController {
       return null;
     }
 
-    // Return user
+    //Return user
     return user;
   }
 
@@ -176,8 +179,8 @@ public class UserController {
                                     .withIssuer("auth0")
                                     .sign(algorithm);
                           }
-                          catch (JWTCreateExeption exeption) {
-                            System.out.println(exeption.getMessage());
+                          catch (JWTCreationException exception) {
+                            System.out.println(exception.getMessage());
                             } finally {
                               return token;
                                }
