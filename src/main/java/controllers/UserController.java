@@ -1,5 +1,6 @@
 package controllers;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,8 +8,12 @@ import cache.UserCache;
 
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import model.User;
 import utils.Hashing;
 import utils.Log;
@@ -148,7 +153,7 @@ public class UserController {
     return user;
   }
 
-  //Helenas notes: (related to the token to do in UserEndpoint)
+  //Helenas notes: (related to the "login" to-do in UserEndpoint)
   public static String loginUser(User user) {
     if(dbCon == null) {
       dbCon = new DatabaseController();
@@ -193,8 +198,52 @@ public class UserController {
           System.out.println(ex.getMessage());
           }
 
-         return " ";
-
+         return null;
   }
+
+  //Helenas notes: This method is related to the "delete users" to-do from the UserEndpoints class.
+  public static String getTokenVerifier(User user) {
+    //Helenas notes: Checking for connection
+    if (dbCon == null) {
+      dbCon = new DatabaseController();
+    }
+
+    String token = user.getToken();
+
+    try {
+      Algorithm algorithm = Algorithm.HMAC256("secret");
+      JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth0").build();
+      DecodedJWT jwt = verifier.verify(token);
+      Claim claim = jwt.getClaim("userId");
+
+      if (user.getId() == claim.asInt()) {
+        return token;
+      }
+    } catch (JWTVerificationException ex) {
+      System.out.println(ex.getMessage());
+    }
+    return "";
+  }
+
+  //Helenas notes: Creating the method to delete users. Related to the "delete users" to-do from the UserEndpoints class.
+  public static User deleteUser(User user) {
+    if (dbCon == null) {
+      dbCon = new DatabaseController();
+    }
+    try {
+      PreparedStatement deleteUser = dbCon.getConnection().prepareStatement("DELETE FROM user WHERE id= ?");
+      deleteUser.setInt(1, user.getId());
+
+      deleteUser.executeUpdate();
+    } catch (SQLException sql) {
+      sql.getStackTrace();
+    }
+    return user;
+    //Helenas notes: End of the to-do that deletes users.
+  }
+
+
+  //Helenas notes: Related to the "update users" to-do from the UserEndpoint class.
+
 
 }

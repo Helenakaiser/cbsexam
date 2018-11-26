@@ -92,16 +92,14 @@ public class UserEndpoints {
     }
   }
 
-  // TODO: Make the system able to login users and assign them a token to use throughout the system.
+  // TODO: Make the system able to login users and assign them a token to use throughout the system.      :FIXED
   @POST
   @Path("/login")
   @Consumes(MediaType.APPLICATION_JSON)
   public Response loginUser(String body) {
 
-
-    //Helenas notes: (related to the token to-do)
+    //Helenas notes: (related to the login to-do)
     User user = new Gson().fromJson(body, User.class);
-
 
     String token = UserController.loginUser(user);
 
@@ -114,17 +112,31 @@ public class UserEndpoints {
 
     }
 
-
     // Return a response with status 200 and JSON as type
     return Response.status(400).entity("Endpoint not implemented yet").build();
   }
 
-  // TODO: Make the system able to delete users
-  public Response deleteUser(String x) {
+  // TODO: Make the system able to delete users       :FIXED
+  //Helenas notes: Creating a reference to postman
+  @POST
+  @Path("/delete")
+  @Consumes(MediaType.APPLICATION_JSON)
 
+  public Response deleteUser(String body) {
+
+    User user = new Gson().fromJson(body, User.class);
+
+    String token = UserController.getTokenVerifier(user);
+
+    if (token != null) {
+      UserController.deleteUser(user);
+
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("The user has been deleted").build();
+    } else
     // Return a response with status 200 and JSON as type
-    return Response.status(400).entity("Endpoint not implemented yet").build();
+    return Response.status(400).entity("  ").build();
   }
+
 
   // TODO: Make the system able to update users
   public Response updateUser(String x) {
