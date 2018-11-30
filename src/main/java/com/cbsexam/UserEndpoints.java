@@ -1,9 +1,9 @@
 package com.cbsexam;
 
+import cache.UserCache;
 import com.google.gson.Gson;
 import controllers.UserController;
 import java.util.ArrayList;
-import javax.jws.soap.SOAPBinding;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,6 +18,9 @@ import utils.Log;
 
 @Path("user")
 public class UserEndpoints {
+  //Helenas notes:
+  private static UserCache userCache;
+  private static UserController userController;
 
   /**
    * @param idUser
@@ -58,7 +61,7 @@ public class UserEndpoints {
     Log.writeLog(this.getClass().getName(), this, "Get all users", 0);
 
     // Get a list of users
-    ArrayList<User> users = UserController.getUsers();
+    ArrayList<User> users = userCache.getUsers(false);
 
     // TODO: Add Encryption to JSON      :FIXED
     // Transfer users to json in order to return it to the user
@@ -99,22 +102,27 @@ public class UserEndpoints {
   @Consumes(MediaType.APPLICATION_JSON)
   public Response loginUser(String body) {
 
-    //Helenas notes: (related to the login to-do)
+    //Helenas notes: (try-catch related to the login to-do)
     User user = new Gson().fromJson(body, User.class);
 
     String token = UserController.loginUser(user);
 
-    if(token!="User could not be created"){
+    try {
 
-      return
-              Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
+      if (token != null) {
+
+        return
+            // Return a response with status 200 and JSON as type
+            Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
+      } else {
+
+        return Response.status(400).entity("Endpoint not implemented yet").build();
+      }
+
+    } catch (Exception ex){
+      System.out.println(ex.getMessage());
     }
-      else {
-
-    }
-
-    // Return a response with status 200 and JSON as type
-    return Response.status(400).entity("Endpoint not implemented yet").build();
+      return null;
   }
 
   // TODO: Make the system able to delete users       :FIXED
@@ -140,7 +148,7 @@ public class UserEndpoints {
   }
 
 
-  // TODO: Make the system able to update users
+  // TODO: Make the system able to update users     :FIXED
   //Helenas notes: Creating a reference to postman
   @POST
   @Path("/update")

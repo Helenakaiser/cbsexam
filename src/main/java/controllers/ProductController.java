@@ -3,23 +3,15 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import cache.OrderCache;
-import cache.ProductCache;
-import cache.UserCache;
 import model.Product;
 import utils.Log;
 
 public class ProductController {
 
   private static DatabaseController dbCon;
-  //Helenas notes: I create an object of the ProductCashe class.
-  private static ProductCache productCache;
 
   public ProductController() {
     dbCon = new DatabaseController();
-    //Helenas notes: I apply a value to the object.
-    productCache = new ProductCache();
   }
 
   public static Product getProduct(int id) {

@@ -29,7 +29,7 @@ public class OrderCache {
         //Helenas notes: I can also use forceUpdate if i want to clear cache, and if there is no objects on the list I can check for new orders.
         if (forceUpdate
                 || ((this.created + this.ttl) >= (System.currentTimeMillis() / 1000L))
-                || this.orders.isEmpty()) {
+                || this.orders == null) {
 
             //Helenas notes: Here I use the arraylist from OrderController to get orders , because I wish to update.
             ArrayList<Order> orders = OrderController.getOrders();

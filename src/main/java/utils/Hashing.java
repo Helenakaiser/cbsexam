@@ -9,9 +9,9 @@ public final class Hashing {
 
   //Helenas notes: I create a salt String so I can hash the user password before saving it.
   // Helenas notes: I use the get method that I made in the config class.
-  private String salt = Config.getSALT();
+  //private String salt = Config.getSALT();
 
-  // TODO: You should add a salt and make this secure          FIXED
+  // TODO: You should add a salt and make this secure          :FIXED
   public static String md5(String rawString) {
     try {
 
@@ -41,7 +41,7 @@ public final class Hashing {
     return null;
   }
 
-  // TODO: You should add a salt and make this secure     FIXED
+  // TODO: You should add a salt and make this secure     :FIXED
   public static String sha(String rawString) {
     try {
       // We load the hashing algoritm we wish to use.
@@ -64,8 +64,8 @@ public final class Hashing {
   }
 
   //Helenas notes: I create a method and add salt to hash the user password before saving it and make it secure.
-  public String saltysalt(String string){
-    String salt = string+this.salt;
-    return  md5(salt);
-  }
+  //public String saltysalt(String string){
+    //String salt = string+this.salt;
+    //return  md5(salt);
+  //}
 }

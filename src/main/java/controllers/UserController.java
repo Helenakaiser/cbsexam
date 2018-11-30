@@ -4,9 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import cache.UserCache;
-
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -22,13 +19,9 @@ import utils.Log;
 public class UserController {
 
   private static DatabaseController dbCon;
-  //Helenas notes: I create an object from the UserCache class.
-  private static UserCache userCache;
 
   public UserController() {
     dbCon = new DatabaseController();
-    //Helenas notes: I apply a value to the object.
-    userCache = new UserCache();
   }
 
   public static User getUser(int id) {
@@ -54,7 +47,8 @@ public class UserController {
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("password"),
-                        rs.getString("email"));
+                        rs.getString("email"),
+                        rs.getLong("created_at"));
 
         // return the create object
         return user;
@@ -97,7 +91,8 @@ public class UserController {
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("password"),
-                        rs.getString("email"));
+                        rs.getString("email"),
+                        rs.getLong("created_at"));
 
         // Add element to list
         users.add(user);
@@ -133,8 +128,8 @@ public class UserController {
                     + "', '"
                     + user.getLastname()
                     + "', '"
-                    //Helenas notes: I call the method I made in the hashing class.
-                    + hashing.saltysalt(user.getPassword())
+                    //Helenas notes:
+                    + hashing.sha(user.getPassword())
                     + "', '"
                     + user.getEmail()
                     + "', "
@@ -158,7 +153,7 @@ public class UserController {
     if (dbCon == null) {
       dbCon = new DatabaseController();
     }
-    String sql = "SELECT * FROM user where email =" + user.getEmail() + "AND password=" + user.getPassword() + " ";
+    String sql = "SELECT * FROM user where email =" + user.getEmail() + "' AND password=" + Hashing.sha(user.getPassword()) + "'";
 
     dbCon.loginUser(sql);
 
@@ -174,9 +169,9 @@ public class UserController {
                         resultSet.getString("firstname"),
                         resultSet.getString("lastname"),
                         resultSet.getString("password"),
-                        resultSet.getString("email"));
-
-        if (userLogin != null) {
+                        resultSet.getString("email"),
+                        resultSet.getLong("created_at"));
+        {
           try {
             Algorithm algorithm = Algorithm.HMAC256("secret");
             token = JWT.create()
@@ -184,18 +179,16 @@ public class UserController {
                     .withIssuer("auth0")
                     .sign(algorithm);
           } catch (JWTCreationException exception) {
-            System.out.println(exception.getMessage());
-          } finally {
-            return token;
+            }
           }
-        }
+            return token;
+
       } else {
         System.out.println("No user found");
       }
     } catch (SQLException ex) {
       System.out.println(ex.getMessage());
     }
-
     return null;
   }
 

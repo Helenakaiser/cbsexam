@@ -26,6 +26,8 @@ public final class Config {
   private static long PRODUCT_TTL;
   //Helenas notes:
   private static String SALT;
+  //Helenas notes:
+  private static String ENCRYPTION_KEY;
 
 
   public static long getProductTtl() {
@@ -45,6 +47,10 @@ public final class Config {
   //Helenas notes:
   public static String getSALT() {
     return SALT;
+  }
+
+  public static String getENCRYPTION_KEY() {
+    return ENCRYPTION_KEY;
   }
 
   public static String getDatabaseHost() {
@@ -126,6 +132,6 @@ public final class Config {
     USER_TTL = json.get("USER_TTL").getAsLong();
     //Helenas notes:
     SALT = json.get("SALT").getAsString();
+    ENCRYPTION_KEY = json.get("ENCRYPTION_KEY").getAsString();
   }
-
 }

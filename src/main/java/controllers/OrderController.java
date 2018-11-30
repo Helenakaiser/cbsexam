@@ -1,10 +1,9 @@
 package controllers;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import cache.OrderCache;
 import model.Address;
 import model.LineItem;
 import model.Order;
@@ -14,13 +13,10 @@ import utils.Log;
 public class OrderController {
 
   private static DatabaseController dbCon;
-  //Helenas notes: I create an object from the OrderCashe class.
-  private static OrderCache orderCache;
 
   public OrderController() {
     dbCon = new DatabaseController();
-    //Helenas notes: I apply a value to the object.
-    orderCache = new OrderCache();
+
   }
 
   public static Order getOrder(int id) {
@@ -141,40 +137,66 @@ public class OrderController {
     // Save the user to the database and save them back to initial order instance
     order.setCustomer(UserController.createUser(order.getCustomer()));
 
-    // TODO: Enable transactions in order for us to not save the order if somethings fails for some of the other inserts.
+    // TODO: Enable transactions in order for us to not save the order if somethings fails for some of the other inserts.   :FIXED
 
-    // Insert the product in the DB
-    int orderID = dbCon.insert(
-        "INSERT INTO orders(user_id, billing_address_id, shipping_address_id, order_total, created_at, updated_at) VALUES("
-            + order.getCustomer().getId()
-            + ", "
-            + order.getBillingAddress().getId()
-            + ", "
-            + order.getShippingAddress().getId()
-            + ", "
-            + order.calculateOrderTotal()
-            + ", "
-            + order.getCreatedAt()
-            + ", "
-            + order.getUpdatedAt()
-            + ")");
+    //Helenas notes:
+    Connection connection = null;
 
-    if (orderID != 0) {
-      //Update the productid of the product before returning
-      order.setId(orderID);
+    try {
+      connection.setAutoCommit(false);
+
+      // Insert the product in the DB
+      int orderID = dbCon.insert(
+              "INSERT INTO orders(user_id, billing_address_id, shipping_address_id, order_total, created_at, updated_at) VALUES("
+                      + order.getCustomer().getId()
+                      + ", "
+                      + order.getBillingAddress().getId()
+                      + ", "
+                      + order.getShippingAddress().getId()
+                      + ", "
+                      + order.calculateOrderTotal()
+                      + ", "
+                      + order.getCreatedAt()
+                      + ", "
+                      + order.getUpdatedAt()
+                      + ")");
+
+      if (orderID != 0) {
+        //Update the productid of the product before returning
+        order.setId(orderID);
+      }
+
+      // Create an empty list in order to go trough items and then save them back with ID
+      ArrayList<LineItem> items = new ArrayList<LineItem>();
+
+      // Save line items to database
+      for (LineItem item : order.getLineItems()) {
+        item = LineItemController.createLineItem(item, order.getId());
+        items.add(item);
+      }
+
+      order.setLineItems(items);
+
+      //Helenas notes: Comitting if the order runs
+      connection.commit();
+    } catch (SQLException ex) {
+      try {
+        connection.rollback();
+
+        System.out.println("Rollback");
+      } catch (SQLException ex2) {
+
+        //Helenas notes: If the order does not run through, it rolls back
+        System.out.println("No rollback" + ex2.getMessage());
+      } finally {
+        //Helenas notes: I use finally so autocommit stays true
+        try {
+          connection.setAutoCommit(true);
+        } catch (SQLException ex3) {
+          ex3.printStackTrace();
+        }
+      }
     }
-
-    // Create an empty list in order to go trough items and then save them back with ID
-    ArrayList<LineItem> items = new ArrayList<LineItem>();
-
-    // Save line items to database
-    for(LineItem item : order.getLineItems()){
-      item = LineItemController.createLineItem(item, order.getId());
-      items.add(item);
-    }
-
-    order.setLineItems(items);
-
     // Return order
     return order;
   }
