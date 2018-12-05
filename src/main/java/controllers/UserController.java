@@ -148,7 +148,7 @@ public class UserController {
     return user;
   }
 
-  //Helenas notes: (related to the "login" to-do in UserEndpoint)
+  //Helenas notes: This method is related to the "login" to-do in UserEndpoint.
   public static String loginUser(User user) {
     if (dbCon == null) {
       dbCon = new DatabaseController();
@@ -213,7 +213,7 @@ public class UserController {
     } catch (JWTVerificationException ex) {
       System.out.println(ex.getMessage());
     }
-    return "";
+    return null;
   }
 
   //Helenas notes: Creating the method to delete users. Related to the "delete users" to-do from the UserEndpoints class.
@@ -230,7 +230,6 @@ public class UserController {
       sql.getStackTrace();
     }
     return user;
-    //Helenas notes: End of the to-do that deletes users.
   }
 
 

@@ -42,7 +42,7 @@ public class OrderController {
         Address billingAddress = AddressController.getAddress(rs.getInt("billing_address_id"));
         Address shippingAddress = AddressController.getAddress(rs.getInt("shipping_address_id"));
 
-        // Create an object instance of order from the database dataa
+        // Create an object instance of order from the database data
         order =
             new Order(
                 rs.getInt("id"),
@@ -186,7 +186,7 @@ public class OrderController {
         System.out.println("Rollback");
       } catch (SQLException ex2) {
 
-        //Helenas notes: If the order does not run through, it rolls back
+        //Helenas notes: If the order does not run through, it will not roll back
         System.out.println("No rollback" + ex2.getMessage());
       } finally {
         //Helenas notes: I use finally so autocommit stays true

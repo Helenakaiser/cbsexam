@@ -1,5 +1,7 @@
 package model;
 
+import utils.Hashing;
+
 public class User {
 
   public int id;
@@ -10,11 +12,12 @@ public class User {
   private static long createdTime;
   private String token;
 
+  //Helenas notes: A user has to contain all of these parameters:
   public User(int id, String firstname, String lastname, String password, String email, long createdTime) {
     this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
-    this.password = password;
+    this.password = Hashing.sha(password);
     this.email = email;
     this.createdTime = createdTime;
   }
@@ -59,7 +62,7 @@ public class User {
     this.password = password;
   }
 
-  public long getCreatedTime() {
+  public static long getCreatedTime() {
     return createdTime;
   }
 

@@ -58,6 +58,7 @@ public class OrderEndpoints {
     return Response.status(200).type(MediaType.TEXT_PLAIN_TYPE).entity(json).build();
   }
 
+  //Helenas notes: "POST" is used when I want to put new data into the database.
   @POST
   @Path("/")
   @Consumes(MediaType.APPLICATION_JSON)
