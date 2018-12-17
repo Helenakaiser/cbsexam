@@ -25,21 +25,22 @@ public class OrderCache {
 
     public ArrayList<Order> getOrders(Boolean forceUpdate) {
 
-        //Helenas notes: Normally I would look at the age of the cache to find out if I want to update.
-        //Helenas notes: I can also use forceUpdate if i want to clear cache, and if there is no objects on the list I can check for new orders.
+        //Helena's notes: Normally I would look at the age of the cache to find out if I want to update.
+        //Helena's notes: I can also use forceUpdate if i want to clear cache,
+        //Helena's notes:  and if there is no objects on the list I can check for new orders.
         if (forceUpdate
                 || ((this.created + this.ttl) >= (System.currentTimeMillis() / 1000L))
                 || this.orders == null) {
 
-            //Helenas notes: Here I use the arraylist from OrderController to get orders , because I wish to update.
+            //Helena's notes: Here I use the arraylist from OrderController to get orders , because I wish to update.
             ArrayList<Order> orders = OrderController.getOrders();
 
-            //Helenas notes: I set created timestamp and orders for the instance.
+            //Helena's notes: I set created timestamp and orders for the instance.
             this.orders = orders;
             this.created = System.currentTimeMillis() / 1000L;
         }
 
-        //Helenas notes: At last i return the orders.
+        //Helena's notes: At last i return the orders.
         return this.orders;
     }
 

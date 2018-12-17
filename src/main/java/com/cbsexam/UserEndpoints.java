@@ -41,12 +41,12 @@ public class UserEndpoints {
 
     // TODO: What should happen if something breaks down?     :FIXED
     // Return the data to the user
-    //Helenas notes: I code an if statement to check the method getUser.
+    //Helena's notes: I code an if statement to check the method getUser.
     if (user != null) {
       // Return the user with the status code 200
       return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
     } else {
-      //Helenas notes: I return the response status 400 which is a http message for “failure”.
+      //Helena's notes: I return the response status 400 which is a http message for “failure”.
       return Response.status(400).entity("Could not get user").build();
     }
   }

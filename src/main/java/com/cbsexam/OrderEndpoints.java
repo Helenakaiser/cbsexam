@@ -32,7 +32,7 @@ public class OrderEndpoints {
     // TODO: Add Encryption to JSON            :FIXED
     // We convert the java object to json with GSON library imported in Maven
     String json = new Gson().toJson(order);
-    //Helenas notes: I use the method "encryptDecryptXOR()" from the Encryption class to add encyption to JSON.
+    //Helena's notes: I use the method "encryptDecryptXOR()" from the Encryption class to add encyption to JSON.
     json = Encryption.encryptDecryptXOR(json);
 
     // Return a response with status 200 and JSON as type
@@ -44,21 +44,20 @@ public class OrderEndpoints {
   @Path("/")
   public Response getOrders() {
 
-    // Call our controller-layer in order to get the order from the DB <-- kommentar som allerede stod der, men vi har lavet det om.
-    //ArrayList<Order> orders = OrderController.getOrders
+    // Call our cache-layer in order to get the order from the database
     ArrayList<Order> orders = orderCache.getOrders(false);
 
     // TODO: Add Encryption to JSON            :FIXED
     // We convert the java object to json with GSON library imported in Maven
     String json = new Gson().toJson(orders);
-    //Helenas notes: I use the method "encryptDecryptXOR()" from the Encryption class to add encyption to JSON.
+    //Helena's notes: I use the method "encryptDecryptXOR()" from the Encryption class to add encyption to JSON.
     json = Encryption.encryptDecryptXOR(json);
 
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.TEXT_PLAIN_TYPE).entity(json).build();
   }
 
-  //Helenas notes: "POST" is used when I want to put new data into the database.
+  //Helena's notes: "POST" is used when I want to put new data into the database.
   @POST
   @Path("/")
   @Consumes(MediaType.APPLICATION_JSON)

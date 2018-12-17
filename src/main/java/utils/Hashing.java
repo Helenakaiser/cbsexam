@@ -9,9 +9,8 @@ import org.bouncycastle.util.encoders.Hex;
 
 public final class Hashing {
 
-  //Helenas notes: I create a salt String so I can hash the user password before saving it.
-  // Helenas notes: I use the get method that I made in the config class.
-  //private String salt = Config.getSALT();
+  //Helena's notes: I create a salt String so I can hash the user password before saving it.
+  // Helena's notes: I use the get method that I made in the config class.
 
   // TODO: You should add a salt and make this secure          :FIXED
   public static String md5(String rawString) {
@@ -44,13 +43,13 @@ public final class Hashing {
   }
 
   // TODO: You should add a salt and make this secure     :FIXED
-  //Helenas notes: "rawString" is the password input
+  //Helena's notes: "rawString" is the password input
   public static String sha(String rawString) {
     try {
       // We load the hashing algoritm we wish to use.
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
-      //Helenas notes: I make this more secure by saving it in config
+      //Helena's notes: I make this more secure by adding salt and saving it in config
       String salt = Config.getSALT();
       rawString = rawString + User.getCreatedTime() + salt;
 
@@ -70,10 +69,4 @@ public final class Hashing {
 
     return rawString;
   }
-
-  //Helenas notes: I create a method and add salt to hash the user password before saving it and make it secure.
-  //public String saltysalt(String string){
-    //String salt = string+this.salt;
-    //return  md5(salt);
-  //}
 }
