@@ -44,7 +44,6 @@ public final class Config {
     return ORDER_TTL;
   }
 
-  //Helenas notes:
   public static String getSALT() {
     return SALT;
   }
@@ -127,10 +126,8 @@ public final class Config {
     SOLR_PATH = json.get("SOLR_PATH").toString().replace("\"", "");
     SOLR_CORE = json.get("SOLR_CORE").toString().replace("\"", "");
     PRODUCT_TTL = json.get("PRODUCT_TTL").getAsLong();
-    //Helenas notes:
     ORDER_TTL = json.get("ORDER_TTL").getAsLong();
     USER_TTL = json.get("USER_TTL").getAsLong();
-    //Helenas notes:
     SALT = json.get("SALT").getAsString();
     ENCRYPTION_KEY = json.get("ENCRYPTION_KEY").getAsString();
   }

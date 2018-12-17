@@ -18,7 +18,6 @@ import utils.Log;
 
 @Path("user")
 public class UserEndpoints {
-  //Helenas notes:
   private static UserCache userCache;
   private static UserController userController;
 
